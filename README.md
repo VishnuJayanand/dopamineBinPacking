@@ -6,7 +6,7 @@ To this end we adapt some Dopamine (https://github.com/google/dopamine) agents, 
 
 Most of the code comes from the Dopamine and the OR-RL benchmark authors. This repository just glues them together.
 
-The goal of this repo is to help our Dream Team to understand the environment by complementing the reading of the paper with easy experiments. Afterwards, adding this environment (which is just a file, bin_packing/bin_packing_environment.py, and the registration in the __init__.py) to the WorldModels can be attempted.
+The goal of this repo is to help our Dream Team to understand the environment by complementing the reading of the paper with easy experiments. Afterwards, adding this environment (which is just a file, bin_packing/bin_packing_environment.py, and the registration in the __init__.py) to the World Models can be attempted.
 
 
 # Setting things up
@@ -34,13 +34,15 @@ Try running:
 
 With the configuration provided it might take about 10 minutes to run.
 
-As next steps perhaps you could read the paper (focusing on the bin packing experiments), and help us understand which configuration we should use for a testing which is informative, but not too time consuming.
+Try seeing the results in tensorboard, try figuring out how the baselines provided (in bin_packing/)  would fare in the same config.
+
+As next steps perhaps you could read the paper (focusing on the bin packing experiments), and help us understand which configuration we should use for a testing which is informative, but not too time consuming. This is the configuration we should choose for the World Models.
 
 If there is time we could also try integrating these environments with Ray (so we can also test with PPO or other models, in the not too time consuming configuration). But for Ray the configuration to have a parametric model with an action mask is not so nice ATM.
 
 # Repo structure
-/bin_packing:  Contains the environment itself, with many alternative versions of the environments within. This folder also includes baseline models proposed by the authors to solve the bin packing problem. Also important to mention, there is an __init__.py file included, which actually registers the environment path with a name into the Gym registry, so we can use it. This means that every time you import (even if you do not use it) the environment to another python file, the name will be available in the registry.
-/bin_packing_dopamine: Contains our run_evaluation code snippet, which helps you to run an evaluation by stiching together configs, environments, agents and test folders.  
-/bin_packing_dopamine/components: This one has code that we created on top of Dopamine. It includes parametric agents (which apply an action mask, such that the agent does not pick invalid actions), our network (defining the Keras network in use), checkpoint_runner (the instance that run_evaluation uses, to run the experiments, this is made external such that we can toy around with its aspects, if needed). 
-/test_configs: Contains the gin files that define a specific experiment.
-/test_results: Will hold the test results. If you want to visualize things, point tensorboard to this folder. Similarly, here the checkpointed models get saved for later use. If you run many times this might take-up some disk space.
+* /bin_packing:  Contains the environment itself, with many alternative versions of the environments within. This folder also includes baseline models proposed by the authors to solve the bin packing problem. Also important to mention, there is an  __init__.py file included, which actually registers the environment path with a name into the Gym registry, so we can use it. This means that every time you import (even if you do not use it) the environment to another python file, the name will be available in the registry.
+* /bin_packing_dopamine: Contains our run_evaluation code snippet, which helps you to run an evaluation by stiching together configs, environments, agents and test folders.  
+* /bin_packing_dopamine/components: This one has code that we created on top of Dopamine. It includes parametric agents (which apply an action mask, such that the agent does not pick invalid actions), our network (defining the Keras network in use), checkpoint_runner (the instance that run_evaluation uses, to run the experiments, this is made external such that we can toy around with its aspects, if needed). 
+* /test_configs: Contains the gin files that define a specific experiment.
+* /test_results: Will hold the test results. If you want to visualize things, point tensorboard to this folder. Similarly, here the checkpointed models get saved for later use. If you run many times this might take-up some disk space.
