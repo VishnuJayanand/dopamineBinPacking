@@ -6,7 +6,7 @@ To this end we adapt some Dopamine (https://github.com/google/dopamine) agents, 
 
 Most of the code comes from the Dopamine and the OR-RL benchmark authors. This repository just glues them together.
 
-The goal of this repo is to help our Dream Team to understand the environment by complementing the reading of the paper with easy experiments. Afterwards, adding this environment (which is just a file, as you will see) to the WorldModels can be attempted.
+The goal of this repo is to help our Dream Team to understand the environment by complementing the reading of the paper with easy experiments. Afterwards, adding this environment (which is just a file, bin_packing/bin_packing_environment.py, and the registration in the __init__.py) to the WorldModels can be attempted.
 
 
 # Setting things up
