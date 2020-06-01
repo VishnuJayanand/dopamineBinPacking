@@ -22,7 +22,8 @@ The goal of this repo is to help our Dream Team to understand the environment by
 * conda install numpy tensorflow=1.15 gym atari_py
 * conda install -c powerai dopamine-rl gin-config
 * conda install conda-build
-* conda develop .
+* conda develop . 
+For the last instruction, notice the dot (.) at the end ;)
 
 With this tensorflow version it might be that you need to also install some opencv packages, but I hope it will not be needed.
 
