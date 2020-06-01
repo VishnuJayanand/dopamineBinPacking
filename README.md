@@ -11,22 +11,30 @@ The goal of this repo is to help our Dream Team to understand the environment by
 
 # Setting things up
 1. Clone the project and go to that folder.
+* git clone https://github.com/gabrielcc2/BinPackingDopamine.git
+* cd BinPackingDopamine
 
 2. Create a conda environment for the project and activate it.
+* conda create -n dopamine
+* conda activate dopamine
+
 3. You'll need to install a couple of things 
-* conda install numpy tensorflow=1.15 gym
+* conda install numpy tensorflow=1.15 gym atari_py
 * conda install -c powerai dopamine-rl gin-config
 * conda install conda-build
 * conda develop .
 
-With this tensorflow version it might be that you need to also install some opencv packages.
+With this tensorflow version it might be that you need to also install some opencv packages, but I hope it will not be needed.
 
 4. Now you should be ready to run things.
-Try running: python bin_packing_dopamine/run_evaluation.py --base_dir="test_results" --gin_files="test_configs/rainbow.gin"
+Try running: 
+* python bin_packing_dopamine/run_evaluation.py --base_dir="test_results" --gin_files="test_configs/rainbow.gin"
 
-Perhaps you could read the paper, and help us understand which configuration we should use for a testing which is not too time consuming.
+With the configuration provided it might take about 10 minutes to run.
 
-If there is time we could also try integrating these environments with Ray (so we can also test with PPO or other models, in the not too time consuming configuration), letting us test more models. But for Ray the configuration to have a parametric model with an action mask is not so nice.
+As next steps perhaps you could read the paper (focusing on the bin packing experiments), and help us understand which configuration we should use for a testing which is informative, but not too time consuming.
+
+If there is time we could also try integrating these environments with Ray (so we can also test with PPO or other models, in the not too time consuming configuration). But for Ray the configuration to have a parametric model with an action mask is not so nice ATM.
 
 # Repo structure
 /bin_packing:  Contains the environment itself, with many alternative versions of the environments within. This folder also includes baseline models proposed by the authors to solve the bin packing problem. Also important to mention, there is an __init__.py file included, which actually registers the environment path with a name into the Gym registry, so we can use it. This means that every time you import (even if you do not use it) the environment to another python file, the name will be available in the registry.
