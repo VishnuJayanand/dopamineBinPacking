@@ -9,6 +9,10 @@ This repository is a quick playground for using the bin packing environment from
 
 To this end we adapt some Dopamine (https://github.com/google/dopamine) agents, extending them to provide action masks, for a better learning.
 
+<div align="center">
+  <img src="https://google.github.io/dopamine/images/dopamine_logo.png"><br><br>
+</div>
+
 Most of the code comes from the Dopamine and the OR-RL benchmark authors. This repository just glues them together.
 
 The goal of this repo is to help our Dream Team to understand the environment by complementing the reading of the paper with easy experiments. Afterwards, adding this environment (which is just a file, bin_packing/bin_packing_environment.py, and the registration in the __init__.py) to the World Models can be attempted.
@@ -51,3 +55,11 @@ If there is time we could also try integrating these environments with Ray (so w
 * /bin_packing_dopamine/components: This one has code that we created on top of Dopamine. It includes parametric agents (which apply an action mask, such that the agent does not pick invalid actions), our network (defining the Keras network in use), checkpoint_runner (the instance that run_evaluation uses, to run the experiments, this is made external such that we can toy around with its aspects, if needed). 
 * /test_configs: Contains the gin files that define a specific experiment.
 * /test_results: Will hold the test results. If you want to visualize things, point tensorboard to this folder. Similarly, here the checkpointed models get saved for later use. If you run many times this might take-up some disk space.
+
+<div align="center">
+  <img src="https://cdn.shopify.com/s/files/1/0017/0432/9285/products/git-force-tee-closeup_1200x1200.jpg?v=1544870407"><br><br>
+</div>
+
+<div align="center">
+  <img src="https://salferrarello.com/wp-content/uploads/2018/06/git-push-force-not-how-it-works.jpg"><br><br>
+</div>
