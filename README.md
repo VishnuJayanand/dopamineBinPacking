@@ -1,5 +1,10 @@
 # BinPackingDopamine
 
+<div align="center">
+  <img src="https://www.codeproject.com/KB/recipes/633133/bpp_mut_1.png"><br><br>
+</div>
+
+
 This repository is a quick playground for using the bin packing environment from: https://github.com/awslabs/or-rl-benchmarks
 
 To this end we adapt some Dopamine (https://github.com/google/dopamine) agents, extending them to provide action masks, for a better learning.
