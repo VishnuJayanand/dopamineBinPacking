@@ -57,7 +57,7 @@ If there is time we could also try integrating these environments with Ray (so w
 * /test_results: Will hold the test results. If you want to visualize things, point tensorboard to this folder. Similarly, here the checkpointed models get saved for later use. If you run many times this might take-up some disk space.
 
 <div align="center">
-  <img src="https://cdn.shopify.com/s/files/1/0017/0432/9285/products/git-force-tee-closeup_1200x1200.jpg?v=1544870407"><br><br>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRtvAme_kpld-DjCidCXvoX8sz0a_EpyauLKVtOIIzyGpwASYMn&usqp=CAU"><br><br>
 </div>
 
 <div align="center">
