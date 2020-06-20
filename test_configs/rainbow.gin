@@ -6,11 +6,11 @@ import dopamine.discrete_domains.run_experiment
 import dopamine.replay_memory.prioritized_replay_buffer
 import gin.tf.external_configurables
 import bin_packing_dopamine.components.our_network
-ParametricRainbowAgent.observation_shape = (10,1)
+ParametricRainbowAgent.observation_shape = (10,100)
 #We could also make the size (100,1)
 ParametricRainbowAgent.stack_size =1
 ParametricRainbowAgent.num_atoms = 51
-ParametricRainbowAgent.vmax = 1500.
+ParametricRainbowAgent.vmax = 255.
 ParametricRainbowAgent.gamma = 0.99
 ParametricRainbowAgent.update_horizon = 1
 ParametricRainbowAgent.min_replay_history = 500
@@ -31,7 +31,7 @@ create_gym_environment.environment_name = 'BinPackingEnv'
 create_gym_environment.version = 'v0'
 create_parametric_agent.agent_name = 'parametric_rainbow'
 Runner.create_environment_fn = @gym_lib.create_gym_environment
-CheckpointRunner.num_iterations = 20
+CheckpointRunner.num_iterations = 1000
 CheckpointRunner.training_steps = 10000
 CheckpointRunner.evaluation_steps = 1000
 CheckpointRunner.max_steps_per_episode = 1000  # Default max episode length.
