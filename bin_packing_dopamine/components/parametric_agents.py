@@ -10,7 +10,7 @@ from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import gym_lib
 from bin_packing_dopamine.components.our_network import OurDQNNetwork, OurRainbowNetwork
 
-BIN_PACKING_SHAPE=(10,1)
+BIN_PACKING_SHAPE=(10,100)
 
 @gin.configurable
 class ParametricDQNAgent(dqn_agent.DQNAgent):
@@ -131,7 +131,7 @@ class ParametricRainbowAgent(rainbow_agent.RainbowAgent, ParametricDQNAgent):
                  stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
                  network=atari_lib.RainbowNetwork, 
                  num_atoms=51,
-                 vmax=10.,
+                 vmax=255.,
                  gamma=0.99,
                  update_horizon=1,
                  min_replay_history=20000,
@@ -214,7 +214,7 @@ class ParametricImplicitQuantileAgent(implicit_quantile_agent.ImplicitQuantileAg
                  num_tau_prime_samples=32,
                  num_quantile_samples=32,
                  quantile_embedding_dim=64,
-                 double_dqn=False,
+                 double_dqn=True,
                  summary_writer=None,
                  summary_writing_frequency=500):
         implicit_quantile_agent.ImplicitQuantileAgent.__init__(
