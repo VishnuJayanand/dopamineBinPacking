@@ -35,6 +35,20 @@ The goal of this repo is to help our Dream Team to understand the environment by
 
 For the last instruction, notice the dot (.) at the end ;)
 
+For Windows you can use the below codes,
+
+1. Creating the Environment
+* conda create -n dopamine python=3.6
+* conda activate dopamine
+
+2. Package installation
+* conda install tensorflow=1.15
+* conda install -c conda-forge gym
+* conda install -c esamuels atari-py
+* conda install -c powerai dopamine-rl gin-config
+* conda install conda-build
+* conda develop .
+
 With this tensorflow version it might be that you need to also install some opencv packages, but I hope it will not be needed.
 
 4. Now you should be ready to run things.

@@ -6,13 +6,12 @@ from gym import spaces
 STATE:
 Number of bags at each level
 Item size
-
 ACTION:
 Choose bag
 """
 
-BIG_NEG_REWARD = -100
-BIG_POS_REWARD = 10
+BIG_NEG_REWARD = -70
+BIG_POS_REWARD = 100
 
 
 class BinPackingGymEnvironment(gym.Env):
@@ -40,8 +39,7 @@ class BinPackingGymEnvironment(gym.Env):
         self.episode_count = 0
 
         # state: number of bags at each level, item size,
-        self.observation_space = spaces.Box(low=np.array([0] * self.bag_capacity + [0]), high=np.array(
-            [self.time_horizon] * self.bag_capacity + [max(self.item_sizes)]), dtype=np.uint32)
+        self.observation_space = spaces.Box(low=np.array([0] * self.bag_capacity + [0]), high=np.array([self.time_horizon] * self.bag_capacity + [max(self.item_sizes)]))
 
         # actions: select a bag from the different levels possible
         self.action_space = spaces.Discrete(self.bag_capacity)
@@ -198,7 +196,7 @@ class BinPackingIncrementalWasteGymEnvironment(BinPackingGymEnvironment):
             reward = BIG_NEG_REWARD - self.waste
         elif action == 0:  # new bag
             self.num_bins_levels[self.item_size] += 1
-            # waste = sum of empty spaces in all bags 
+            # waste = sum of empty spaces in all bags
             self.waste = self.bag_capacity - self.item_size
             # reward is negative waste
             reward = -1 * self.waste
@@ -214,7 +212,7 @@ class BinPackingIncrementalWasteGymEnvironment(BinPackingGymEnvironment):
                 self.num_bins_levels[action + self.item_size] += 1
             self.__update_bin_type_distribution_map(action)
             self.num_bins_levels[action] -= 1
-            # waste = sum of empty spaces in all bags 
+            # waste = sum of empty spaces in all bags
             self.waste = -self.item_size
             # reward is negative waste
             reward = -1 * self.waste
@@ -240,8 +238,9 @@ class BinPackingNearActionGymEnvironment(BinPackingGymEnvironment):
         invalid_action = not (self.__is_action_valid(action))
         if invalid_action:
             action = self.__get_nearest_valid_action(action)
-
-        reward = self.__insert_item(action)
+            reward = BIG_NEG_REWARD
+        else:
+            reward = self.__insert_item(action)
 
         self.total_reward += reward
 
@@ -267,7 +266,7 @@ class BinPackingNearActionGymEnvironment(BinPackingGymEnvironment):
             else:
                 self.num_bins_levels[action + self.item_size] += 1
             self.num_bins_levels[action] -= 1
-            # waste reduces as we insert item in existing bag 
+            # waste reduces as we insert item in existing bag
             self.waste = -self.item_size
         # reward is negative waste
         reward = -1 * self.waste
@@ -302,6 +301,7 @@ class BinPackingNearActionGymEnvironment(BinPackingGymEnvironment):
             return True
         elif self.num_bins_levels[action] == 0:
             print('cannot insert item because bin of this level does not exist')
+            #print ('!no ins!')
             return False
         else:  # insert in existing bag
             return True
@@ -330,8 +330,7 @@ class BinPackingActionMaskGymEnvironment(BinPackingNearActionGymEnvironment):
             "action_mask": spaces.Box(
                 0,
                 1,
-                shape=(self.action_space.n,),
-                dtype=np.float32),
+                shape=(self.action_space.n,)),
             "real_obs": self.observation_space
         })
 
@@ -339,6 +338,19 @@ class BinPackingActionMaskGymEnvironment(BinPackingNearActionGymEnvironment):
         state = super().reset()
         valid_actions = self.__get_valid_actions()
         self.action_mask = [1 if x in valid_actions else 0 for x in range(self.action_space.n)]
+        # obs=np.zeros([64, 64, 3], dtype=int) # old 2D version
+        # obs[0][0][0] = np.array(state)
+        mask = np.append(np.array(self.action_mask), 0)
+        # print("mask len : ", len(mask))
+        '''
+        # old 2D version
+        xid = 0
+        for y in np.array(state):
+            obs[0][xid] = y
+            # print(xid)
+            obs[1][xid] = mask[xid]
+            xid += 1
+        '''
         obs = {
             "action_mask": np.array(self.action_mask),
             "real_obs": np.array(state),
@@ -349,6 +361,21 @@ class BinPackingActionMaskGymEnvironment(BinPackingNearActionGymEnvironment):
         state, rew, done, info = super().step(action)
         valid_actions = self.__get_valid_actions()
         self.action_mask = [1 if x in valid_actions else 0 for x in range(self.action_space.n)]
+
+        # obs = np.zeros([64, 64, 3], dtype=int)   # old 2D version
+        # obs[0] = np.array(state)
+        # obs[1] = np.array(self.action_mask)
+        # obs = np.zeros([64, 64, 3])
+        # obs[0][0][0] = np.array(state)
+        mask = np.append(np.array(self.action_mask), 0)
+
+        ''' old 2D version 
+        xid = 0
+        for y in np.array(state):
+            obs[0][xid] = y
+            obs[1][xid] = mask[xid]
+            xid += 1
+        '''
         obs = {
             "action_mask": np.array(self.action_mask),
             "real_obs": np.array(state),
@@ -365,6 +392,65 @@ class BinPackingActionMaskGymEnvironment(BinPackingNearActionGymEnvironment):
         valid_actions.append(0)  # open new bag
         #print("Valid actions "+str(valid_actions))
         return valid_actions
+
+
+class BinPacking2DMaskGymEnvironment(BinPackingActionMaskGymEnvironment):
+    def __init__(self, env_config={}):
+
+        env_config_forced = {
+            "bag_capacity": 30,
+            'item_sizes': [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            # 'item_probabilities': [0.14, 0.10, 0.06, 0.13, 0.11, 0.13, 0.03, 0.11, 0.19], #bounded waste
+            'item_probabilities': [0.06, 0.11, 0.11, 0.22, 0, 0.11, 0.06, 0, 0.33],  # perfect pack
+            #                  'item_probabilities': [0, 0, 0, 1/3, 0, 0, 0, 0, 2/3], #linear waste
+            'time_horizon': 1000,  # 10000
+        }
+        super().__init__(env_config_forced)
+
+
+    def reset(self):
+        obs = super().reset()
+        obs["real_obs"] = self.bin_to_pic_encoder(obs["real_obs"])
+        return obs
+
+    def step(self, action):
+
+        print(action)
+        obs, rew, done, info = super().step(action[0])
+
+        obs["real_obs"] = self.bin_to_pic_encoder(obs["real_obs"])
+        return obs, rew, done, info
+
+    def bin_to_pic_encoder(self, state):
+
+        item_codes = [[100, 100, 0], [100, 0, 100], [100, 0, 0], [0, 100, 100], [0, 100, 0], [0, 0, 100], [200, 200, 0],
+                      [200, 0, 200], [200, 0, 0], [0, 200, 200], [0, 200, 0], [0, 0, 200]]
+        max_color_num = 255
+        part_size = 7
+        encoding_multiplier = int(max_color_num / part_size)
+        # print(encoding_multiplier)
+
+        bins = state[:-1]
+
+        encoded_img = np.zeros([64, 64, 3], dtype=int)
+        for idx, x in enumerate(bins):
+            idx = idx * 2
+            idy = 0
+            while x >= part_size:
+                encoded_img[idx][idy] = part_size * encoding_multiplier
+                encoded_img[idx + 1][idy] = part_size * encoding_multiplier
+                # print(x)
+                x = int(x - part_size)
+                # print(x)
+                # print()
+                idy += 1
+
+            encoded_img[idx][idy] = x * encoding_multiplier
+            encoded_img[idx + 1][idy] = x * encoding_multiplier
+
+            encoded_img[60:64] = item_codes[state[len(state) - 1]]
+
+        return encoded_img
 
 
 if __name__ == '__main__':

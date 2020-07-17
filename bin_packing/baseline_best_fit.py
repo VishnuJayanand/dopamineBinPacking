@@ -21,10 +21,10 @@ def get_action(state):
     return 0
 
 env_config = {
-                 "bag_capacity": 9,#100,
-                 'item_sizes': [2,3],#[1, 2, 3, 4, 5, 6, 7, 8, 9],
+                 "bag_capacity": 100,#100,
+                 'item_sizes': [1, 2, 3, 4, 5, 6, 7, 8, 9],
 #                  'item_probabilities': [0.14, 0.10, 0.06, 0.13, 0.11, 0.13, 0.03, 0.11, 0.19], #bounded waste
-                 'item_probabilities': [0.8,0.2],#[0.06, 0.11, 0.11, 0.22, 0, 0.11, 0.06, 0, 0.33], #perfect pack
+                 'item_probabilities': [0.06, 0.11, 0.11, 0.22, 0, 0.11, 0.06, 0, 0.33], #perfect pack
 #                  'item_probabilities': [0, 0, 0, 1/3, 0, 0, 0, 0, 2/3], #linear waste
                  'time_horizon': 1000,#10000
              }        
